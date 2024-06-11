@@ -1,0 +1,12 @@
+{{template "base" .}}
+{{define "body"}}
+<form action='/user/login' method='POST' novalidate>
+    <div>
+        <label>Email:</label>
+            <input type='email' name='email' placeholder='E-mail'>
+        <label>Password:</label>
+            <input type='password' name='password' placeholder='Password'>
+        <input type='submit' value='Login'>
+    </div>
+</form>
+{{end}}
