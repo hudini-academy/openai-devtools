@@ -8,7 +8,31 @@
         <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Ubuntu'>
     </head>
     <body>
-        {{template "body" .}}
+
+       <section class="devtools-container">
+       <h1>ChatGPT DevTools</h1>
+        <nav>
+            <a href='/user/signup' class='signup'>Signup</a>
+            <a href='/user/login' class='signup'>Login</a>
+            <a href='/' class='logout'>Home</a>
+        </nav>
+         {{template "body" .}}
+        <div class='list-controls'>
+          <form method="GET" class="devtools-buttons" action="/debugger">
+            <input type="submit" value="Debugger">
+        </form>
+        <form method="POST" class="devtools-buttons" action="/tester">
+            <input type="submit" value="Tester">
+        </form>
+        <form method="POST" class="devtools-buttons" action="/formatter">
+            <input type="submit" value="Formatter">
+        </form>
+        <form method="POST" class="devtools-buttons" action="/newfunction">
+            <input type="submit" value="New">
+        </form>
+        </div>
+        {{template "response" .}}
+         </section>
     </body>
 </html>
 {{end}}

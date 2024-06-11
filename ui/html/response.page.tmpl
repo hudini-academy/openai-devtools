@@ -1,0 +1,20 @@
+{{template "base" .}}
+{{define "body"}}
+{{end}}
+{{define "response"}}
+        <h2>Debugger</h2>
+            <form method="POST" class="devtools-buttons" action="">
+                <input type="hidden" value="Debugger" >
+                <label >Code:</label>
+                <br></br>
+                <textarea name="Message"></textarea>
+                <input  id="submit-button" type="submit" value="Submit">
+            </form>
+    
+    <form class="response-section">
+        <h2>Your response here</h2>
+       {{if ne .Response ""}}
+        <p>{{.Response}}</p>
+        {{end}}
+    </form> 
+{{end}}
