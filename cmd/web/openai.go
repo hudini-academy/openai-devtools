@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -92,16 +91,16 @@ func (c *OpenAIClient) CompleteText(prompt string, ChatSystem *ChatSystem) (stri
 	if err != nil {
 		return "", err
 	}
-	log.Println(string(body))
+	// log.Println(string(body))
 	// Parse JSON response
 	var completionResponse CompletionResponse
 	if err := json.Unmarshal(body, &completionResponse); err != nil {
 		return "", err
 	}
-	log.Println(completionResponse)
+	// log.Println(completionResponse)
 
 	if len(completionResponse.Choices) > 0 {
-		log.Println(completionResponse.Choices[0].Message.Content)
+		// log.Println(completionResponse.Choices[0].Message.Content)
 		return completionResponse.Choices[0].Message.Content, nil
 	}
 
