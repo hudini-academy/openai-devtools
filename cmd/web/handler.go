@@ -180,13 +180,10 @@ func (app *application) signUpForm(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/signup.page.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.errorLog.Println(err.Error())
-		http.Error(w, "internal server error", 500)
-		return
-	}
-	ts.Execute(w, app.session.PopString(r, "flash"))
+	flash:=app.session.PopString(r, "flash")
+	render(w, files, &TemplateData{
+		Flash: flash,
+	})
 }
 
 func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
@@ -220,13 +217,10 @@ func (app *application) loginForm(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/login.page.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.errorLog.Println(err.Error())
-		http.Error(w, "internal server error", 500)
-		return
-	}
-	ts.Execute(w, app.session.PopString(r, "flash"))
+	flash:=app.session.PopString(r, "flash")
+	render(w, files, &TemplateData{
+		Flash: flash,
+	})
 }
 
 func (app *application) login(w http.ResponseWriter, r *http.Request) {
@@ -258,6 +252,8 @@ func (app *application) login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
+	app.session.Put(r, "flash", "Logout Success")
 	app.session.Put(r, "Authenticated", false)
+
 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
