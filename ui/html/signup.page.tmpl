@@ -1,0 +1,24 @@
+{{template "base" .}}
+{{define "body"}}
+<body>
+    <form method="POST" action="/user/signup">
+        <h1> Sign Up </h1>
+            Name<br>
+            <input type="text" name="name" placeholder="Name">
+            Email<br>
+            <input type="text" name="email" placeholder="Email">
+            Password<br>
+            <input type="password" name="password" placeholder="Password">
+            
+            <input type="submit" name="submit" value="Submit">
+            <input type="reset" value="Reset">
+            {{if .}}
+            <div class="flash">
+                {{.}}
+            </div>
+            {{end}}
+{{end}}
+{{define "button"}}
+{{end}}
+{{define "response"}}
+{{end}}

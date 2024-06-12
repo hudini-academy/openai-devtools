@@ -1,16 +1,31 @@
 {{template "base" .}}
+
 {{define "body"}}
 <form action='/user/login' method='POST' novalidate>
     <div>
         <label>Email:</label>
-            <input type='email' name='email' placeholder='E-mail'>
+        <input type='email' name='email' placeholder='E-mail'>
+    </div>
+    <div>
         <label>Password:</label>
-            <input type='password' name='password' placeholder='Password'>
+        <input type='password' name='password' placeholder='Password'>
+    </div>
+    {{if .}}
+            <div class="flash">
+                {{.}}
+            </div>
+    {{end}}
+    <div>
         <input type='submit' value='Login'>
+    </div>
+    <div>
+        <p>Are you a new user? <a href='/user/signup'>Signup here</a>.</p>
     </div>
 </form>
 {{end}}
+
 {{define "button"}}
 {{end}}
+
 {{define "response"}}
 {{end}}

@@ -1,0 +1,264 @@
+ERROR	2024/06/12 11:28:48 server.go:3212: http: panic serving [::1]:61640: runtime error: invalid memory address or nil pointer dereference
+goroutine 9 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xcbcd00?, 0x10642e0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000396e0, {0xdd6cf0, 0xc00003f540}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:126 +0x9a
+net/http.HandlerFunc.ServeHTTP(0xc00014e300?, {0xdd6cf0?, 0xc00003f540?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0xdd6e40, 0xc0001620e0}, 0xc00014e300)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000398f0?, {0xdd6e40?, 0xc0001620e0?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000008390, {0xdd6e40, 0xc0001620e0}, 0xc00014e300)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0xdd5ae0?}, {0xdd6e40?, 0xc0001620e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000152090, {0xdd76e8, 0xc000039bf0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:28:48 server.go:3212: http: panic serving [::1]:61664: runtime error: invalid memory address or nil pointer dereference
+goroutine 12 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xcbcd00?, 0x10642e0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000396e0, {0xdd6cf0, 0xc00003f680}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:126 +0x9a
+net/http.HandlerFunc.ServeHTTP(0xc00014e500?, {0xdd6cf0?, 0xc00003f680?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0xdd6e40, 0xc0001622a0}, 0xc00014e500)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000398f0?, {0xdd6e40?, 0xc0001622a0?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000008390, {0xdd6e40, 0xc0001622a0}, 0xc00014e500)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0xdd5ae0?}, {0xdd6e40?, 0xc0001622a0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0001522d0, {0xdd76e8, 0xc000039bf0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:29:14 server.go:3212: http: panic serving [::1]:61665: runtime error: invalid memory address or nil pointer dereference
+goroutine 14 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xcbcd00?, 0x10642e0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000396e0, {0xdd6cf0, 0xc00018d880}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:126 +0x9a
+net/http.HandlerFunc.ServeHTTP(0xc00018ef00?, {0xdd6cf0?, 0xc00018d880?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0xdd6e40, 0xc0001a2620}, 0xc00018ef00)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000398f0?, {0xdd6e40?, 0xc0001a2620?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000008390, {0xdd6e40, 0xc0001a2620}, 0xc00018ef00)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0xdd5ae0?}, {0xdd6e40?, 0xc0001a2620?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000152480, {0xdd76e8, 0xc000039bf0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:29:14 server.go:3212: http: panic serving [::1]:61669: runtime error: invalid memory address or nil pointer dereference
+goroutine 22 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xcbcd00?, 0x10642e0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000396e0, {0xdd6cf0, 0xc000252080}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:126 +0x9a
+net/http.HandlerFunc.ServeHTTP(0xc00018ee00?, {0xdd6cf0?, 0xc000252080?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0xdd6e40, 0xc00025a000}, 0xc00018ee00)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000398f0?, {0xdd6e40?, 0xc00025a000?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000008390, {0xdd6e40, 0xc00025a000}, 0xc00018ee00)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0xdd5ae0?}, {0xdd6e40?, 0xc00025a000?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0000a2360, {0xdd76e8, 0xc000039bf0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:29:14 server.go:3212: http: panic serving [::1]:61671: runtime error: invalid memory address or nil pointer dereference
+goroutine 41 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xcbcd00?, 0x10642e0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000396e0, {0xdd6cf0, 0xc000252180}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:126 +0x9a
+net/http.HandlerFunc.ServeHTTP(0xc00025e100?, {0xdd6cf0?, 0xc000252180?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0xdd6e40, 0xc00025a0e0}, 0xc00025e100)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000398f0?, {0xdd6e40?, 0xc00025a0e0?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000008390, {0xdd6e40, 0xc00025a0e0}, 0xc00025e100)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0xdd5ae0?}, {0xdd6e40?, 0xc00025a0e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000190630, {0xdd76e8, 0xc000039bf0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:31:08 server.go:3212: http: panic serving [::1]:61693: runtime error: invalid memory address or nil pointer dereference
+goroutine 22 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x11dcd00?, 0x15842e0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000896b0, {0x12f6cf0, 0xc000190640}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:126 +0x9a
+net/http.HandlerFunc.ServeHTTP(0xc000192400?, {0x12f6cf0?, 0xc000190640?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0x12f6e40, 0xc0001b80e0}, 0xc000192400)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000898c0?, {0x12f6e40?, 0xc0001b80e0?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000094378, {0x12f6e40, 0xc0001b80e0}, 0xc000192400)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0x12f5ae0?}, {0x12f6e40?, 0xc0001b80e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc00010c090, {0x12f76e8, 0xc000089bc0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:31:08 server.go:3212: http: panic serving [::1]:61702: runtime error: invalid memory address or nil pointer dereference
+goroutine 24 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x11dcd00?, 0x15842e0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000896b0, {0x12f6cf0, 0xc00003e140}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:126 +0x9a
+net/http.HandlerFunc.ServeHTTP(0xc000192300?, {0x12f6cf0?, 0xc00003e140?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0x12f6e40, 0xc00007c0e0}, 0xc000192300)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000898c0?, {0x12f6e40?, 0xc00007c0e0?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000094378, {0x12f6e40, 0xc00007c0e0}, 0xc000192300)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0x12f5ae0?}, {0x12f6e40?, 0xc00007c0e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc00010c1b0, {0x12f76e8, 0xc000089bc0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:31:08 server.go:3212: http: panic serving [::1]:61703: runtime error: invalid memory address or nil pointer dereference
+goroutine 25 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x11dcd00?, 0x15842e0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000896b0, {0x12f6cf0, 0xc00003e280}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:126 +0x9a
+net/http.HandlerFunc.ServeHTTP(0xc000218100?, {0x12f6cf0?, 0xc00003e280?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0x12f6e40, 0xc00007c2a0}, 0xc000218100)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000898c0?, {0x12f6e40?, 0xc00007c2a0?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000094378, {0x12f6e40, 0xc00007c2a0}, 0xc000218100)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0x12f5ae0?}, {0x12f6e40?, 0xc00007c2a0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc00010c240, {0x12f76e8, 0xc000089bc0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:31:08 server.go:3212: http: panic serving [::1]:61704: runtime error: invalid memory address or nil pointer dereference
+goroutine 26 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x11dcd00?, 0x15842e0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000896b0, {0x12f6cf0, 0xc00003e380}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:126 +0x9a
+net/http.HandlerFunc.ServeHTTP(0xc000218300?, {0x12f6cf0?, 0xc00003e380?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0x12f6e40, 0xc00007c380}, 0xc000218300)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000898c0?, {0x12f6e40?, 0xc00007c380?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000094378, {0x12f6e40, 0xc00007c380}, 0xc000218300)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0x12f5ae0?}, {0x12f6e40?, 0xc00007c380?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc00010c360, {0x12f76e8, 0xc000089bc0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:33:04 server.go:3212: http: panic serving [::1]:61726: runtime error: invalid memory address or nil pointer dereference
+goroutine 9 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x40c9a0?, 0x7b3f00?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000396e0, {0x526d30, 0xc000094580}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:127 +0x9d
+net/http.HandlerFunc.ServeHTTP(0xc000096400?, {0x526d30?, 0xc000094580?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0x526e80, 0xc0000a80e0}, 0xc000096400)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000398f0?, {0x526e80?, 0xc0000a80e0?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000008390, {0x526e80, 0xc0000a80e0}, 0xc000096400)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0x525b20?}, {0x526e80?, 0xc0000a80e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc00012a120, {0x527728, 0xc000039bf0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:33:04 server.go:3212: http: panic serving [::1]:61727: runtime error: invalid memory address or nil pointer dereference
+goroutine 19 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x40c9a0?, 0x7b3f00?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000396e0, {0x526d30, 0xc000094680}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:127 +0x9d
+net/http.HandlerFunc.ServeHTTP(0xc000096000?, {0x526d30?, 0xc000094680?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0x526e80, 0xc0000a82a0}, 0xc000096000)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000398f0?, {0x526e80?, 0xc0000a82a0?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000008390, {0x526e80, 0xc0000a82a0}, 0xc000096000)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0x525b20?}, {0x526e80?, 0xc0000a82a0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc00019e120, {0x527728, 0xc000039bf0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+ERROR	2024/06/12 11:33:04 server.go:3212: http: panic serving [::1]:61729: runtime error: invalid memory address or nil pointer dereference
+goroutine 37 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x40c9a0?, 0x7b3f00?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+main.(*application).login(0xc0000396e0, {0x526d30, 0xc000094780}, 0x0?)
+	C:/Users/SivanandhaMS/Desktop/Open ai/openai-devtools/cmd/web/handler.go:127 +0x9d
+net/http.HandlerFunc.ServeHTTP(0xc000150100?, {0x526d30?, 0xc000094780?}, 0x0?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+main.(*application).routes.(*Session).Enable.func5({0x526e80, 0xc0000a8460}, 0xc000150100)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/golangcollege/sessions@v1.2.0/session.go:155 +0x14c
+net/http.HandlerFunc.ServeHTTP(0xc0000398f0?, {0x526e80?, 0xc0000a8460?}, 0x4?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/bmizerany/pat.(*PatternServeMux).ServeHTTP(0xc000008390, {0x526e80, 0xc0000a8460}, 0xc000150100)
+	C:/Users/SivanandhaMS/go/pkg/mod/github.com/bmizerany/pat@v0.0.0-20210406213842-e4b6760bdd6f/mux.go:117 +0x191
+net/http.serverHandler.ServeHTTP({0x525b20?}, {0x526e80?, 0xc0000a8460?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc00009a360, {0x527728, 0xc000039bf0})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb

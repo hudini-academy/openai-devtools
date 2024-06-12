@@ -1,7 +1,16 @@
 {{template "base" .}}
 
 {{define "body"}}
+    
+<nav class="logout" >
+        {{if .Username}}
+        <p>Hey, {{.Username}}!</p>
+        {{end}}
+        <a href='/home'> Home </a>
+       <a href='/user/logout'> Logout </a>
+    </nav>
 {{end}}
+
 {{define "button"}}
 <div class='list-controls'>
           <form method="GET" class="devtools-buttons" action="/debugger">
