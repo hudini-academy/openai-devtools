@@ -39,15 +39,61 @@ func NewOpenAIClient(apiKey string) *OpenAIClient {
 }
 
 // CompleteText sends a prompt to OpenAI's completion endpoint and returns the generated text.
-func (c *OpenAIClient) CompleteText(prompt string, ChatSystem *ChatSystem) (string, error) {
-
-	text := prompt
+func (c *OpenAIClient) GetCompletionResponse(promptText string, ChatSystem *ChatSystem) ([]byte, error) {
 
 	url := "https://api.openai.com/v1/chat/completions"
 
+	requestJSONString, err := c.genereateCompletionRequest(promptText, ChatSystem)
+
+	if err != nil {
+		return []byte(""), err // TODO: Handle error properly
+	}
+
+	convertRequest := string(requestJSONString)
+
+	// Create HTTP client
+	client := &http.Client{}
+
+	// Create HTTP request
+	req, err := http.NewRequest("POST", url, strings.NewReader(convertRequest))
+	if err != nil {
+		return []byte(""), err
+	}
+
+	// Set headers
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+c.APIKey)
+
+	// Make request
+	resp, err := client.Do(req)
+	if err != nil {
+		return []byte(""), err
+	}
+	//defer resp.Body.Close()
+
+	// Read response body
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return []byte(""), err
+	}
+
+	// Parse JSON response
+	var completionResponse CompletionResponse
+	if err := json.Unmarshal(body, &completionResponse); err != nil {
+		return []byte(""), err
+	}
+
+	if len(completionResponse.Choices) > 0 {
+		return []byte(completionResponse.Choices[0].Message.Content), nil
+	}
+
+	return []byte(""), fmt.Errorf("no completion response received")
+}
+
+func (c *OpenAIClient) genereateCompletionRequest(promptText string, ChatSystem *ChatSystem) ([]byte, error) {
 	messages := []Message{
 		{Role: "system", Content: ChatSystem.SystemMessage},
-		{Role: "user", Content: text}, // Use the text variable here
+		{Role: "user", Content: promptText}, // Use the text variable here
 	}
 
 	requestJson := struct {
@@ -61,48 +107,9 @@ func (c *OpenAIClient) CompleteText(prompt string, ChatSystem *ChatSystem) (stri
 	requestJSONString, err := json.MarshalIndent(requestJson, "", "  ")
 	if err != nil {
 		fmt.Println("Error marshaling JSON:", err)
-		return "error here", nil
+		return []byte("Failed to generate the JSON"), nil
 	}
 
-	convertRequest := string(requestJSONString)
+	return requestJSONString, nil
 
-	// Create HTTP client
-	client := &http.Client{}
-
-	// Create HTTP request
-	req, err := http.NewRequest("POST", url, strings.NewReader(convertRequest))
-	if err != nil {
-		return "", err
-	}
-
-	// Set headers
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+c.APIKey)
-
-	// Make request
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	//defer resp.Body.Close()
-
-	// Read response body
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-	// log.Println(string(body))
-	// Parse JSON response
-	var completionResponse CompletionResponse
-	if err := json.Unmarshal(body, &completionResponse); err != nil {
-		return "", err
-	}
-	// log.Println(completionResponse)
-
-	if len(completionResponse.Choices) > 0 {
-		// log.Println(completionResponse.Choices[0].Message.Content)
-		return completionResponse.Choices[0].Message.Content, nil
-	}
-
-	return "", fmt.Errorf("no completion response received")
 }

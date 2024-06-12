@@ -47,7 +47,6 @@ nav a:hover {
     margin-bottom: 20px;
     display: flex;
     justify-content: center;
-    gap: 20px; /* Adjust the gap between buttons */
 }
 
 /* Center align buttons */
@@ -65,11 +64,9 @@ nav a:hover {
 #submit-button{
     height: 39px;
     width: 44px;
-    border-radius: 100%;
-    background: black;
     position: relative;
-    top: 139px;
-    right: 69px;
+    top: 137px;
+    right: 50px;
     color: black;
 }
 
@@ -107,5 +104,9 @@ nav a:hover {
 .devtools-buttons textarea{
     height: 176px;
     width: 95%;
+    resize: none;
+}
+.devtools-buttons textarea::placeholder{
+    font-size: x-large;
 }
 

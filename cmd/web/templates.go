@@ -13,8 +13,9 @@ type PageLayoutData struct {
 }
 
 type TemplateData struct {
-	Response       string
+	Response       template.HTML
 	PageLayoutData *PageLayoutData
+	PromptMessage  string
 }
 
 func render(w http.ResponseWriter, files []string, data *TemplateData) {

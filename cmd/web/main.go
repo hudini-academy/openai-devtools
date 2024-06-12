@@ -3,33 +3,33 @@ package main
 import (
 	"log"
 	"net/http"
-	"flag"
 )
 
-var client *OpenAIClient
+var openAIClient *OpenAIClient
 
-func createConfig() {
+func createConfig() *application {
 	// Create OpenAI client
-	client = NewOpenAIClient(ApiKey)
+	openAIClient = NewOpenAIClient(ApiKey)
+
+	return &application{OpenAIClient: openAIClient}
 }
 
-
-type application struct{
-	Response string
+type application struct {
+	Response     string
+	OpenAIClient *OpenAIClient
 }
 
 func main() {
-	createConfig()
-// Address of the HTTP server in Default is http://localhost:4000
-    addr := flag.String("addr", ":4000", "HTTP network address")
+	app := createConfig()
+	// Address of the HTTP server in Default is http://localhost:4000
+	addr := ":4000"
 
-	app := &application{}
-	srv:=&http.Server{
-		Addr: *addr,
+	srv := &http.Server{
+		Addr:    addr,
 		Handler: app.routes(),
 	}
-	err:=srv.ListenAndServe()
-	if err!=nil{
-        log.Fatal(err)
-    }
+	err := srv.ListenAndServe()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
