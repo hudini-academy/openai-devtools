@@ -14,3 +14,9 @@ type User struct {
 	Email string
 	Password []byte
 }
+
+type CustomGPT struct {
+	ID int
+	SystemName string
+	SystemPrompt string
+}

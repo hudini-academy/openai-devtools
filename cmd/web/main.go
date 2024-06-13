@@ -17,6 +17,7 @@ type application struct {
 	Response     string
 	OpenAIClient *OpenAIClient
 	users        *mysql.UserModel
+	CustomGPT  *mysql.CustomGPTModel
 	errorLog     *log.Logger
 	infoLog      *log.Logger
 	session      *sessions.Session
@@ -41,6 +42,9 @@ func main() {
 
 	app := &application{
 		users:        &mysql.UserModel{DB: db},
+		CustomGPT:  &mysql.CustomGPTModel{DB: db},
+		errorLog:     errorLog,
+		infoLog:      infoLog,
 		session:      session,
 		OpenAIClient: openAIClient,
 	}

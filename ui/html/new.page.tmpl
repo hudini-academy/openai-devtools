@@ -1,0 +1,23 @@
+{{template "base" .}}
+
+{{define "body"}}    
+    <nav class="logout" >
+        <a href='/home'> Home </a>
+       <a href='/user/logout'> Logout </a>
+    </nav>
+{{end}}
+
+{{define "button"}}
+<div>
+        <form method="POST" action="/createcustomgpt">
+                <input type="hidden" value="NewFeature" >
+                <label>Tittle</label>
+                <input type="text" name="FunctionName" placeholder="Tittle"></input>
+                <label>System Message</label>
+                <textarea name="FunctionMessage" placeholder="Message"></textarea>
+                <input type="submit" value="Submit"/>
+            </form>
+    </div>
+{{end}}
+{{define "response"}}
+{{end}}

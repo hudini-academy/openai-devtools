@@ -1,6 +1,7 @@
 package main
 
 import (
+	"OpenAIDevTools/pkg/models"
 	"html/template"
 	"log"
 	"net/http"
@@ -10,17 +11,15 @@ import (
 
 //TODO: Render function
 
-type PageLayoutData struct {
-	Title string
-}
-
 type TemplateData struct {
-	Response       template.HTML
-	PageLayoutData *PageLayoutData
-	PromptMessage  string
-	Username       string
-	session      *sessions.Session
-	Flash string
+	Response         template.HTML
+	PageLayoutData   *models.CustomGPT
+	AllButton        []*models.CustomGPT
+	PromptMessage    string
+	Username         string
+	session          *sessions.Session
+	Flash            string
+	PromptID         int
 }
 
 func render(w http.ResponseWriter, files []string, data *TemplateData) {

@@ -44,3 +44,4 @@ func (m *UserModel) Authenticate(email, password string) (bool, error) {
 func (m *UserModel) Get(id int) (*models.User, error) {
 	return nil, nil
 }
+

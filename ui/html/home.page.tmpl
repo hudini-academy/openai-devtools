@@ -13,17 +13,15 @@
 
 {{define "button"}}
 <div class='list-controls'>
-          <form method="GET" class="devtools-buttons" action="/debugger">
-            <input type="submit" value="Debugger">
+       
+        {{range .AllButton}}
+         <form method="GET" class="devtools-buttons" action="/customgpt">
+         <input type="hidden" name="id" value="{{.ID}}">
+            <input type="submit" value="{{.SystemName}}">
         </form>
-        <form method="GET" class="devtools-buttons" action="/tester">
-            <input type="submit" value="Tester">
-        </form>
-        <form method="GET" class="devtools-buttons" action="/formatter">
-            <input type="submit" value="Formatter">
-        </form>
-        <form method="GET" class="devtools-buttons" action="/home">
-            <input type="submit" value="New">
+        {{end}}
+        <form method="GET" class="devtools-buttons" action="/rendercustomgpt">
+            <input type="submit" value="Custom GPT">
         </form>
 </div>
 {{end}}

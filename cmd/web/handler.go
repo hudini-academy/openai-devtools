@@ -1,9 +1,11 @@
 package main
 
 import (
+	"OpenAIDevTools/pkg/models"
 	"fmt"
 	"html/template"
 	"regexp"
+	"strconv"
 	"strings"
 
 	// "strings"
@@ -13,6 +15,7 @@ import (
 )
 
 var Response string
+var AllCustomGPT []*models.CustomGPT
 
 // Renders homepage
 func (app *application) Home(w http.ResponseWriter, r *http.Request) {
@@ -20,8 +23,15 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/home.page.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
+	var err error
+	AllCustomGPT, err = app.CustomGPT.GetFunction()
+	if err != nil {
+		return
+	}
 
-	render(w, files, &TemplateData{})
+	render(w, files, &TemplateData{
+		AllButton: AllCustomGPT,
+	})
 }
 
 // isValidEmail checks if the given email address is valid
@@ -43,29 +53,64 @@ func (app *application) Base(w http.ResponseWriter, r *http.Request) {
 }
 
 // Fetches the Degug response from OpenAI and redirects to home
-func (app *application) fetchDebugPage(w http.ResponseWriter, r *http.Request) {
+
+func (app *application) renderCustomGPT(w http.ResponseWriter, r *http.Request) {
+	files := []string{
+		"./ui/html/new.page.tmpl",
+		"./ui/html/base.layout.tmpl",
+	}
+
+	render(w, files, nil)
+}
+
+// Create a button by getting the name and message
+func (app *application) createCustomGPT(w http.ResponseWriter, r *http.Request) {
+	ButtonName := r.FormValue("FunctionName")
+	newMessage := r.FormValue("FunctionMessage")
+
+	// fmt.Println(ButtonName, newMessage)
+	err := app.CustomGPT.InsertFunction(ButtonName, newMessage)
+	if err != nil {
+		app.errorLog.Println(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+	}
+
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
+}
+
+// Render the page Prompt page
+func (app *application) customGPTPage(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	custom, err := app.CustomGPT.GetIndividualFunction(id)
+	if err != nil {
+		return
+	}
 	files := []string{
 		"./ui/html/response.page.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
 
 	render(w, files, &TemplateData{
-		Response: "",
-		PageLayoutData: &PageLayoutData{
-			Title: "Debugger",
+		Response:  "",
+		AllButton: AllCustomGPT,
+		PageLayoutData: &models.CustomGPT{
+			SystemName: custom.SystemName,
 		},
 		PromptMessage: "",
 	})
 }
-func (app *application) fetchDebug(w http.ResponseWriter, r *http.Request) {
-	prompt := r.FormValue("Message")
 
-	DebuggerSystem := &ChatSystem{
-		SystemMessage: debuggerSystemMessage,
+// User function process the given buttons system message and give response
+func (app *application) customGPTFunction(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	custom, err := app.CustomGPT.GetIndividualFunction(id)
+	prompt := r.FormValue("Message")
+	userSystem := &ChatSystem{
+		SystemMessage: custom.SystemPrompt,
 	}
 
 	// Call completion API
-	response, err := app.OpenAIClient.GetCompletionResponse(prompt, DebuggerSystem)
+	response, err := app.OpenAIClient.GetCompletionResponse(prompt, userSystem)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
@@ -75,100 +120,17 @@ func (app *application) fetchDebug(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/base.layout.tmpl",
 	}
 	Response := mdToHTML(response)
-	// Response = string(response)
+	// render the response
 	render(w, files, &TemplateData{
-		PageLayoutData: &PageLayoutData{
-			Title: "Debugger",
+		AllButton: AllCustomGPT,
+		PageLayoutData: &models.CustomGPT{
+			SystemName: custom.SystemName,
 		},
 		Response:      template.HTML(Response),
 		PromptMessage: prompt,
 	})
 
 	// fmt.Println("Response:", Response)
-}
-
-func (app *application) testerPage(w http.ResponseWriter, r *http.Request) {
-	files := []string{
-		"./ui/html/response.page.tmpl",
-		"./ui/html/base.layout.tmpl",
-	}
-
-	render(w, files, &TemplateData{
-		Response: "",
-		PageLayoutData: &PageLayoutData{
-			Title: "Tester",
-		},
-		PromptMessage: "",
-	})
-}
-func (app *application) tester(w http.ResponseWriter, r *http.Request) {
-	prompt := r.FormValue("Message")
-
-	DebuggerSystem := &ChatSystem{
-		SystemMessage: testerSystemMessage,
-	}
-
-	// Call completion API
-	response, err := app.OpenAIClient.GetCompletionResponse(prompt, DebuggerSystem)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	files := []string{
-		"./ui/html/response.page.tmpl",
-		"./ui/html/base.layout.tmpl",
-	}
-	Response := mdToHTML(response)
-	render(w, files, &TemplateData{
-		PageLayoutData: &PageLayoutData{
-			Title: "Tester",
-		},
-		Response:      template.HTML(Response),
-		PromptMessage: prompt,
-	})
-
-	// fmt.Println("Response:", Response)
-}
-
-func (app *application) formatterPage(w http.ResponseWriter, r *http.Request) {
-	files := []string{
-		"./ui/html/response.page.tmpl",
-		"./ui/html/base.layout.tmpl",
-	}
-
-	render(w, files, &TemplateData{
-		Response: "",
-		PageLayoutData: &PageLayoutData{
-			Title: "Formatter",
-		},
-		PromptMessage: "",
-	})
-}
-func (app *application) formatter(w http.ResponseWriter, r *http.Request) {
-	prompt := r.FormValue("Message")
-
-	DebuggerSystem := &ChatSystem{
-		SystemMessage: formatterSystemMessage,
-	}
-
-	// Call completion API
-	response, err := app.OpenAIClient.GetCompletionResponse(prompt, DebuggerSystem)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	files := []string{
-		"./ui/html/response.page.tmpl",
-		"./ui/html/base.layout.tmpl",
-	}
-	Response := mdToHTML(response)
-	render(w, files, &TemplateData{
-		PageLayoutData: &PageLayoutData{
-			Title: "Formatter",
-		},
-		Response:      template.HTML(Response),
-		PromptMessage: prompt,
-	})
 }
 
 // func (app *application) handleQuery(w http.ResponseWriter, r *http.Request) {
@@ -180,7 +142,7 @@ func (app *application) signUpForm(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/signup.page.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
-	flash:=app.session.PopString(r, "flash")
+	flash := app.session.PopString(r, "flash")
 	render(w, files, &TemplateData{
 		Flash: flash,
 	})
@@ -203,6 +165,7 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			app.errorLog.Println(err.Error())
 			http.Error(w, "Internal Server Error", 500)
 		}
+
 		app.session.Put(r, "flash", "SignUp Successful")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 	} else {
@@ -217,7 +180,7 @@ func (app *application) loginForm(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/login.page.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
-	flash:=app.session.PopString(r, "flash")
+	flash := app.session.PopString(r, "flash")
 	render(w, files, &TemplateData{
 		Flash: flash,
 	})

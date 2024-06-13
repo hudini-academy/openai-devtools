@@ -12,14 +12,11 @@ func (app *application) routes() http.Handler {
 	mux.Get("/home", app.session.Enable(http.HandlerFunc(app.Home)))
 	mux.Get("/", app.loadUser(http.HandlerFunc(app.Home)))
 
-	mux.Get("/debugger", app.session.Enable(http.HandlerFunc(app.fetchDebugPage)))
-	mux.Post("/debugger", app.session.Enable(http.HandlerFunc(app.fetchDebug)))
+	mux.Get("/rendercustomgpt", http.HandlerFunc(app.renderCustomGPT))
+	mux.Post("/createcustomgpt", http.HandlerFunc(app.createCustomGPT))
 
-	mux.Get("/tester", http.HandlerFunc(app.testerPage))
-	mux.Post("/tester", http.HandlerFunc(app.tester))
-
-	mux.Get("/formatter", http.HandlerFunc(app.formatterPage))
-	mux.Post("/formatter", http.HandlerFunc(app.formatter))
+	mux.Get("/customgpt", http.HandlerFunc(app.customGPTPage))
+	mux.Post("/customgpt", http.HandlerFunc(app.customGPTFunction))
 
 	// Login and Sign up
 	mux.Get("/user/login", app.session.Enable(http.HandlerFunc(app.loginForm)))

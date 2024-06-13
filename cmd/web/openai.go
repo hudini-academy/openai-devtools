@@ -13,6 +13,9 @@ type OpenAIClient struct {
 	APIKey string
 }
 
+type ChatSystem struct {
+	SystemMessage string
+}
 // CompletionResponse represents the response structure from OpenAI's completion endpoint.
 
 type Message struct {
