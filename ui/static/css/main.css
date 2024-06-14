@@ -135,6 +135,20 @@ form[action='/user/signup'] label {
     margin-bottom: 5px;
     color: #333;
 }
+.password-container {
+    position: relative;
+}
+.password-container input[type="password"],
+.password-container input[type="text"] {
+    width: calc(100% - 30px); /* Adjust for icon spacing */
+}
+.password-container .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
 
 form[action='/user/login'] input[type="email"],
 form[action='/user/login'] input[type="password"],
