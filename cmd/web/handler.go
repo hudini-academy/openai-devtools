@@ -7,10 +7,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
-	// "strings"
-
-	//"log"
 	"net/http"
 )
 
@@ -78,6 +74,17 @@ func (app *application) createCustomGPT(w http.ResponseWriter, r *http.Request) 
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
+func (app *application) deleteCustomGPT(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	fmt.Println(id)
+	err := app.CustomGPT.DeleteFunction(id)
+	if err != nil {
+		app.errorLog.Println(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+	}
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
+}
+
 // Render the page Prompt page
 func (app *application) customGPTPage(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
@@ -94,6 +101,7 @@ func (app *application) customGPTPage(w http.ResponseWriter, r *http.Request) {
 		Response:  "",
 		AllButton: AllCustomGPT,
 		PageLayoutData: &models.CustomGPT{
+			ID: id,
 			SystemName: custom.SystemName,
 		},
 		PromptMessage: "",
@@ -129,8 +137,6 @@ func (app *application) customGPTFunction(w http.ResponseWriter, r *http.Request
 		Response:      template.HTML(Response),
 		PromptMessage: prompt,
 	})
-
-	// fmt.Println("Response:", Response)
 }
 
 // func (app *application) handleQuery(w http.ResponseWriter, r *http.Request) {
