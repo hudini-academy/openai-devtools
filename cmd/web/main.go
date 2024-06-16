@@ -3,6 +3,7 @@ package main
 import (
 	"OpenAIDevTools/pkg/models/mysql"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -25,7 +26,9 @@ type application struct {
 
 func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
-	dsn := "root:root@/openaiusers?parseTime=true"
+	// Make the db user and password to load from a config file
+
+	dsn := fmt.Sprintf("%s:%s@/%s?parseTime=true", DBUser, DBPass, DBName)
 	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge", "Secret Key")
 	flag.Parse()
 
@@ -47,6 +50,8 @@ func main() {
 		infoLog:      infoLog,
 		session:      session,
 		OpenAIClient: openAIClient,
+		infoLog:      infoLog,
+		errorLog:     errorLog,
 	}
 
 	srv := &http.Server{
@@ -54,7 +59,7 @@ func main() {
 		Handler:  app.routes(),
 		ErrorLog: errorLog,
 	}
-	infoLog.Println("starting server on :4000", addr)
+	fmt.Println("starting server on ", *addr)
 	err := srv.ListenAndServe()
 	if err != nil {
 		errorLog.Fatal(err)
