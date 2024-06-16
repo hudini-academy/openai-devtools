@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"html/template"
 	"log"
-	"net/http"
 	"regexp"
-	"strconv"
 	"strings"
+
+	"net/http"
+	"strconv"
 	"unicode"
 
 	"golang.org/x/crypto/bcrypt"
@@ -18,8 +19,8 @@ var Response string
 var AllCustomGPT []*models.CustomGPT
 
 // Renders homepage
-func (app *application) Home(w http.ResponseWriter, r *http.Request) {
-	// Retrieve user ID from session
+func (app *application) Base(w http.ResponseWriter, r *http.Request) {
+  // Retrieve user ID from session
 	userID := app.session.GetInt(r, "username")
 	if userID == 0 {
 		app.session.Put(r, "flash", "Unauthorized access")
@@ -27,7 +28,21 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Fetch user details from userID
+	// Check if user id present in session
+	// if not, show landing page
+	isAuth, ok := app.session.Get(r, "Authenticated").(bool)
+	if !ok {
+		app.errorLog.Println("Error getting session")
+		http.Error(w, "Internal Server Error", 500)
+	}
+
+	// If user is not authenticated, show landing page
+	if !isAuth {
+		app.landingPage(w, r)
+		return
+	}
+  
+  	// Fetch user details from userID
 	userName, err := app.users.GetUsernameByID(userID)
 	if err != nil {
 		app.errorLog.Println("Error fetching user name:", err.Error())
@@ -39,8 +54,11 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 		Username:  userName,
 		AllButton: AllCustomGPT,
 	}
+
+	// if preset, show the dashboard
 	files := []string{
 		"./ui/html/home.page.tmpl",
+		"./ui/html/header.partial.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
 	var errr error
@@ -76,18 +94,12 @@ func isValidPassword(password string) error {
 	return nil
 }
 
-// isValidEmail checks if the given email address is valid
-func isValidEmail(email string) bool {
-	// Regular expression for validating email addresses
-	pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
-	regex := regexp.MustCompile(pattern)
-	return regex.MatchString(email)
-}
-
-// Renders homepage
-func (app *application) Base(w http.ResponseWriter, r *http.Request) {
+// Renders Landing page
+func (app *application) landingPage(w http.ResponseWriter, r *http.Request) {
 	files := []string{
-		"./ui/html/base.page.tmpl",
+		"./ui/html/landing.page.tmpl",
+		"./ui/html/header.partial.tmpl",
+		"./ui/html/hero.partial.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
 
@@ -196,11 +208,14 @@ func (app *application) customGPTFunction(w http.ResponseWriter, r *http.Request
 func (app *application) signUpForm(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/signup.page.tmpl",
+		"./ui/html/header.partial.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
 	flash := app.session.PopString(r, "flash")
+	flashCategory := app.session.PopString(r, "flashCategory")
 	render(w, files, &TemplateData{
-		Flash: flash,
+		Flash:         flash,
+		FlashCategory: flashCategory,
 	})
 }
 
@@ -216,6 +231,17 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 
 	if !isValidEmail(userEmail) {
 		app.session.Put(r, "flash", "Invalid email address")
+		app.session.Put(r, "flashCategory", "failure")
+		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
+		return
+	}
+	if app.users.UserExist(userEmail) {
+		app.session.Put(r, "flash", "User already exists")
+		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
+		return
+	}
+	if err := isValidPassword(password); err != nil {
+		app.session.Put(r, "flash", err.Error())
 		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
 		return
 	}
@@ -238,9 +264,11 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
 		}
 		app.session.Put(r, "flash", "SignUp Successful")
+		app.session.Put(r, "flashCategory", "success")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 	} else {
 		app.session.Put(r, "flash", " item field cant be empty!")
+		app.session.Put(r, "flashCategory", "failure")
 		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
 	}
 
@@ -249,11 +277,15 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 func (app *application) loginForm(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/login.page.tmpl",
+		"./ui/html/header.partial.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
+
 	flash := app.session.PopString(r, "flash")
+	flashCategory := app.session.PopString(r, "flashCategory")
 	render(w, files, &TemplateData{
-		Flash: flash,
+		Flash:         flash,
+		FlashCategory: flashCategory,
 	})
 }
 
@@ -264,30 +296,35 @@ func (app *application) login(w http.ResponseWriter, r *http.Request) {
 
 	if !isValidEmail(userEmail) {
 		app.session.Put(r, "flash", "Invalid email address")
+		app.session.Put(r, "flashCategory", "failure")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 		return
 	}
-	isUser, _ := app.users.Authenticate(userEmail, userPass)
-	// if err != nil {
-	// 	app.errorLog.Println(err.Error())
-	// 	http.Error(w, "internal server error", 500)
-	// 	return
-	// }
-	if isUser != -1 {
-		app.session.Put(r, "Authentication", true)
-		app.session.Put(r, "flash", "Login Successful")
+
+	isUser, err := app.users.Authenticate(userEmail, userPass)
+	if err != nil {
+		app.errorLog.Println(err.Error())
+		http.Error(w, "internal server error", 500)
+		return
+	}
+
+	if isUser != -1 { // TODO: VISHWA: need to check if this is correct logic
+		app.session.Put(r, "Authenticated", true)
+
 		app.session.Put(r, "username", isUser)
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	} else {
 		app.session.Put(r, "flash", "Login failed")
+		app.session.Put(r, "flashCategory", "failure")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
-		app.session.Put(r, "Authentication", false)
 
+		app.session.Put(r, "Authenticated", false)
 	}
 }
-func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
-	app.session.Put(r, "flash", "Logout Success")
-	app.session.Put(r, "Authentication", false)
 
-	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
+	// app.session.Put(r, "flash", "Logout Success")
+	app.session.Put(r, "Authenticated", false)
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

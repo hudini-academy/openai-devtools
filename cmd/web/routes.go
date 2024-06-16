@@ -8,9 +8,8 @@ import (
 
 func (app *application) routes() http.Handler {
 	mux := pat.New()
-	mux.Get("/", (http.HandlerFunc(app.Base)))
-	mux.Get("/home", app.session.Enable(app.AuthenticateMiddleware(http.HandlerFunc(app.Home))))
-	
+
+	mux.Get("/", app.session.Enable(http.HandlerFunc(app.Base)))
 
 	mux.Get("/rendercustomgpt", http.HandlerFunc(app.renderCustomGPT))
 	mux.Post("/createcustomgpt", http.HandlerFunc(app.createCustomGPT))

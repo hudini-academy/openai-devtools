@@ -12,14 +12,15 @@ import (
 //TODO: Render function
 
 type TemplateData struct {
-	Response         template.HTML
-	PageLayoutData   *models.CustomGPT
-	AllButton        []*models.CustomGPT
-	PromptMessage    string
-	Username         string
-	session          *sessions.Session
-	Flash            string
-	PromptID         int
+	Response       template.HTML
+	PageLayoutData *models.CustomGPT
+	AllButton      []*models.CustomGPT
+	PromptMessage  string
+	Username       string
+	session        *sessions.Session
+	Flash          string
+	PromptID       int
+	FlashCategory  string
 }
 
 func render(w http.ResponseWriter, files []string, data *TemplateData) {

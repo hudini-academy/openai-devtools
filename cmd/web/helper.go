@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"regexp"
 
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/ast"
@@ -38,7 +39,6 @@ func mdToHTML(md []byte) []byte {
 	return markdown.Render(doc, renderer)
 
 }
-
 func initLogger() (*log.Logger, *log.Logger) {
 	//create variable f for info
 	infoFile, err := os.OpenFile("./info.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
@@ -68,4 +68,12 @@ func openDB(dsn string) (*sql.DB, error) {
 		return nil, err
 	}
 	return db, nil
+}
+
+// isValidEmail checks if the given email address is valid
+func isValidEmail(email string) bool {
+	// Regular expression for validating email addresses
+	pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+	regex := regexp.MustCompile(pattern)
+	return regex.MatchString(email)
 }
