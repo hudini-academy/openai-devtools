@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"unicode"
 
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/ast"
@@ -13,9 +14,6 @@ import (
 
 	"fmt"
 )
-
-
-
 
 var printAst = false
 
@@ -70,10 +68,37 @@ func openDB(dsn string) (*sql.DB, error) {
 	return db, nil
 }
 
-// isValidEmail checks if the given email address is valid
+// isValidEmail checks if the given email address is valid.
+// It uses a regular expression pattern to validate the email format.
 func isValidEmail(email string) bool {
 	// Regular expression for validating email addresses
 	pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
 	regex := regexp.MustCompile(pattern)
 	return regex.MatchString(email)
+}
+
+// isValidPassword checks if a password meets the required criteria.
+// The password must contain at least 8 characters, including at least one uppercase letter,
+// one lowercase letter, one digit, and one special character.
+// If the password is valid, it returns nil. Otherwise, it returns an error.
+func isValidPassword(password string) error {
+	var hasUpper, hasLower, hasDigit, hasSpecial bool
+	for _, char := range password {
+		switch {
+		case unicode.IsUpper(char):
+			hasUpper = true
+		case unicode.IsLower(char):
+			hasLower = true
+		case unicode.IsDigit(char):
+			hasDigit = true
+		case unicode.IsPunct(char) || unicode.IsSymbol(char):
+			hasSpecial = true
+		}
+	}
+
+	if len(password) < 8 || !hasUpper || !hasLower || !hasDigit || !hasSpecial {
+		return fmt.Errorf("password must contain 8 characters including an uppercase, lowercase, digit and special character")
+	}
+
+	return nil
 }

@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"html/template"
 	"log"
-	"regexp"
 	"strings"
 
 	"net/http"
 	"strconv"
-	"unicode"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -20,13 +18,7 @@ var AllCustomGPT []*models.CustomGPT
 
 // Renders homepage
 func (app *application) Base(w http.ResponseWriter, r *http.Request) {
-  // Retrieve user ID from session
-	userID := app.session.GetInt(r, "username")
-	if userID == 0 {
-		app.session.Put(r, "flash", "Unauthorized access")
-		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
-		return
-	}
+	// Retrieve user ID from session
 
 	// Check if user id present in session
 	// if not, show landing page
@@ -41,16 +33,31 @@ func (app *application) Base(w http.ResponseWriter, r *http.Request) {
 		app.landingPage(w, r)
 		return
 	}
-  
-  	// Fetch user details from userID
+
+	userID := app.session.GetInt(r, "username")
+
+	if userID == 0 {
+		app.session.Put(r, "flash", "Unauthorized access")
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Fetch user details from userID
 	userName, err := app.users.GetUsernameByID(userID)
+
 	if err != nil {
 		app.errorLog.Println("Error fetching user name:", err.Error())
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
+
+	AllCustomGPT, err := app.CustomGPT.GetFunction()
+	if err != nil {
+		return
+	}
+
 	// Render home page with user's name
-	data := TemplateData{
+	data := &TemplateData{
 		Username:  userName,
 		AllButton: AllCustomGPT,
 	}
@@ -61,37 +68,8 @@ func (app *application) Base(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/header.partial.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
-	var errr error
-	AllCustomGPT, errr = app.CustomGPT.GetFunction()
-	if errr != nil {
-		return
-	}
 
-	render(w, files, &data)
-}
-
-// isValidPassword checks if the given password meets the required criteria
-func isValidPassword(password string) error {
-
-	var hasUpper, hasLower, hasDigit, hasSpecial bool
-	for _, char := range password {
-		switch {
-		case unicode.IsUpper(char):
-			hasUpper = true
-		case unicode.IsLower(char):
-			hasLower = true
-		case unicode.IsDigit(char):
-			hasDigit = true
-		case unicode.IsPunct(char) || unicode.IsSymbol(char):
-			hasSpecial = true
-		}
-	}
-
-	if len(password) < 8 || !hasUpper || !hasLower || !hasDigit || !hasSpecial {
-		return fmt.Errorf("password must contain 8 characters including an uppercase, lowercase, digit and special character")
-	}
-
-	return nil
+	render(w, files, data)
 }
 
 // Renders Landing page
@@ -111,6 +89,7 @@ func (app *application) landingPage(w http.ResponseWriter, r *http.Request) {
 func (app *application) renderCustomGPT(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/new.page.tmpl",
+		"./ui/html/header.partial.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
 
@@ -122,6 +101,8 @@ func (app *application) createCustomGPT(w http.ResponseWriter, r *http.Request) 
 	ButtonName := r.FormValue("FunctionName")
 	newMessage := r.FormValue("FunctionMessage")
 
+	fmt.Println(ButtonName, newMessage)
+
 	// fmt.Println(ButtonName, newMessage)
 	err := app.CustomGPT.InsertFunction(ButtonName, newMessage)
 	if err != nil {
@@ -129,7 +110,7 @@ func (app *application) createCustomGPT(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Internal Server Error", 500)
 	}
 
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (app *application) deleteCustomGPT(w http.ResponseWriter, r *http.Request) {
@@ -152,6 +133,7 @@ func (app *application) customGPTPage(w http.ResponseWriter, r *http.Request) {
 	}
 	files := []string{
 		"./ui/html/response.page.tmpl",
+		"./ui/html/header.partial.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
 
@@ -159,7 +141,7 @@ func (app *application) customGPTPage(w http.ResponseWriter, r *http.Request) {
 		Response:  "",
 		AllButton: AllCustomGPT,
 		PageLayoutData: &models.CustomGPT{
-			ID: id,
+			ID:         id,
 			SystemName: custom.SystemName,
 		},
 		PromptMessage: "",
@@ -187,8 +169,10 @@ func (app *application) customGPTFunction(w http.ResponseWriter, r *http.Request
 	}
 	files := []string{
 		"./ui/html/response.page.tmpl",
+		"./ui/html/header.partial.tmpl",
 		"./ui/html/base.layout.tmpl",
 	}
+
 	Response := mdToHTML(response)
 	// render the response
 	render(w, files, &TemplateData{
@@ -200,10 +184,6 @@ func (app *application) customGPTFunction(w http.ResponseWriter, r *http.Request
 		PromptMessage: prompt,
 	})
 }
-
-// func (app *application) handleQuery(w http.ResponseWriter, r *http.Request) {
-
-// }
 
 func (app *application) signUpForm(w http.ResponseWriter, r *http.Request) {
 	files := []string{
@@ -290,14 +270,13 @@ func (app *application) loginForm(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) login(w http.ResponseWriter, r *http.Request) {
-
 	userEmail := r.FormValue("email")
 	userPass := r.FormValue("password")
 
 	if !isValidEmail(userEmail) {
 		app.session.Put(r, "flash", "Invalid email address")
 		app.session.Put(r, "flashCategory", "failure")
-		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -308,15 +287,14 @@ func (app *application) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if isUser != -1 { // TODO: VISHWA: need to check if this is correct logic
+	if isUser != -1 {
 		app.session.Put(r, "Authenticated", true)
-
 		app.session.Put(r, "username", isUser)
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	} else {
 		app.session.Put(r, "flash", "Login failed")
 		app.session.Put(r, "flashCategory", "failure")
-		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 
 		app.session.Put(r, "Authenticated", false)
 	}

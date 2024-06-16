@@ -6,12 +6,17 @@ body {
     background-color: #f8f9fa;
 }
 
+.mainBody, .mainHeader{
+    position: relative;
+    z-index: 10;
+}
+
 /* Container Styles */
 .devtools-container {
     /* max-width: 800px; */
     height: 100vh;
     margin: 0 auto;
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -44,12 +49,12 @@ nav a:hover {
 }
 
 /* Form Styles */
-.devtools-buttons {
+/* .devtools-buttons {
     margin-bottom: 20px;
     display: flex;
     justify-content: center;
-    gap: 20px; /* Adjust the gap between buttons */
-}
+    gap: 20px; 
+} */
 
 /* Center align buttons */
 /* .devtools-buttons input[type="submit"] {
@@ -72,20 +77,20 @@ nav a:hover {
     color: black;
 } */
 
-.devtools-buttons input[type="submit"]:hover {
+/* .devtools-buttons input[type="submit"]:hover {
     background-color: #0056b3;
-}
+} */
 
 /* Response Section Styles */
 .response-section {
     margin-top: 20px;
-    padding: 20px;
-    background-color: #f0f0f0;
+    /* padding: 20px; */
+    /* background-color: #f0f0f0; */
     border-radius: 5px;
  
 }
 .response-section p{
-    text-align: justify;
+    /* text-align: justify; */
 }
 
 .response-section h2 {
@@ -93,11 +98,7 @@ nav a:hover {
     margin-bottom: 10px;
     color: #555
 }
-.list-controls{
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
+
 .devtools-buttons label{
     position: relative;
 }
@@ -113,8 +114,8 @@ nav a:hover {
 }
 
 /* Login Form Styles */
-form[action='/user/login'],
-form[action='/user/signup'] {
+form[action='/login'],
+form[action='/signup'] {
     max-width: 400px;
     margin: 20px auto;
     padding: 20px;
@@ -123,15 +124,15 @@ form[action='/user/signup'] {
     border-radius: 5px;
 }
 
-form[action='/user/login'] h1,
-form[action='/user/signup'] h1 {
+form[action='/login'] h1,
+form[action='/signup'] h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
 }
 
-form[action='/user/login'] label,
-form[action='/user/signup'] label {
+form[action='/login'] label,
+form[action='/signup'] label {
     display: block;
     margin-bottom: 5px;
     color: #333;
@@ -151,11 +152,11 @@ form[action='/user/signup'] label {
     cursor: pointer;
 }
 
-form[action='/user/login'] input[type="email"],
-form[action='/user/login'] input[type="password"],
-form[action='/user/signup'] input[type="text"],
-form[action='/user/signup'] input[type="email"],
-form[action='/user/signup'] input[type="password"] {
+form[action='/login'] input[type="email"],
+form[action='/login'] input[type="password"],
+form[action='/signup'] input[type="text"],
+form[action='/signup'] input[type="email"],
+form[action='/signup'] input[type="password"] {
     width: calc(100% - 22px);
     padding: 10px;
     border: 1px solid #ccc;
@@ -164,8 +165,8 @@ form[action='/user/signup'] input[type="password"] {
     font-size: 16px;
 }
 
-form[action='/user/login'] input[type="submit"],
-form[action='/user/signup'] input[type="submit"] {
+form[action='/login'] input[type="submit"],
+form[action='/signup'] input[type="submit"] {
     /* background-color: #007bff; */
     color: #fff;
     border: none;
@@ -175,12 +176,12 @@ form[action='/user/signup'] input[type="submit"] {
     transition: background-color 0.3s ease;
 }
 
-/* form[action='/user/login'] input[type="submit"]:hover,
-form[action='/user/signup'] input[type="submit"]:hover {
+/* form[action='/login'] input[type="submit"]:hover,
+form[action='/signup'] input[type="submit"]:hover {
     background-color: #0056b3;
 } */
 
-form[action='/user/signup'] input[type="reset"] {
+form[action='/signup'] input[type="reset"] {
     background-color: #dc3545;
     color: #fff;
     border: none;
@@ -190,23 +191,22 @@ form[action='/user/signup'] input[type="reset"] {
     transition: background-color 0.3s ease;
 }
 
-form[action='/user/signup'] input[type="reset"]:hover {
+form[action='/signup'] input[type="reset"]:hover {
     background-color: #c82333;
 }
 
 /* Adjustments for Debugger Response Form */
-.devtools-buttons textarea {
-    height: 150px; /* Adjusted height for consistency */
-    width: 100%; /* Full width */
-    padding: 10px; /* Padding adjustment */
+/* .devtools-buttons textarea {
+    height: 150px; 
+    width: 100%; 
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 10px;
     font-size: 16px;
-}
+} */
 
-#submit-button {
-    /* Your existing styles for submit button */
+/* #submit-button {
     height: 39px;
     width: 44px;
     border-radius: 100%;
@@ -215,13 +215,13 @@ form[action='/user/signup'] input[type="reset"]:hover {
     top: 139px;
     right: 69px;
     color: black;
-}
+} */
 
 .list-controls {
     /* Your existing styles for list controls */
-    display: flex;
+    /* display: flex;
     gap: 10px;
-    justify-content: center;
+    justify-content: center; */
 }
 
 .devtools-buttons label {
@@ -230,12 +230,13 @@ form[action='/user/signup'] input[type="reset"]:hover {
     left: 97px;
     bottom: -2px;
 }
-.devtools-buttons textarea{
+/* .devtools-buttons textarea{
     height: 176px;
-    width: 95%;
+    width: 100%;
     resize: none;
-}
-.devtools-buttons textarea::placeholder{
+} */
+/* .devtools-buttons textarea::placeholder{
     font-size: x-large;
-}
+} */
+
 

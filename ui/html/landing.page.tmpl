@@ -1,7 +1,12 @@
 {{template "base" .}}
 {{define "body"}}
       <div>
-      {{ template "hero" .}}
-      </div>
+            <nav class="flex items-center justify-between mx-auto max-w-5xl py-12 h-16 pt-16" aria-label="Global">
+                  <a href="/" class="-m-1.5 p-1.5 z-10">
+                  <img class="h-20 w-auto" src="/static/image/gpt-devtools-logo-nbg.png" alt="">
+                  </a>
+            </nav>
 
+            {{ template "hero" .}}
+      </div>
 {{end}}

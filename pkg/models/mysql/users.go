@@ -60,12 +60,12 @@ func (m *UserModel) GetUsernameByID(id int) (string, error) {
 
 // UserExist checks if a user with the given email already exists in the database.
 func (m *UserModel) UserExist(email string) bool {
-    var exists bool
-    query := "SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)"
-    err := m.DB.QueryRow(query, email).Scan(&exists)
-    if err != nil {
-        log.Println("Error checking email existence:", err)
-        return false
-    }
-    return exists
+	var exists bool
+	query := "SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)"
+	err := m.DB.QueryRow(query, email).Scan(&exists)
+	if err != nil {
+		log.Println("Error checking email existence:", err)
+		return false
+	}
+	return exists
 }

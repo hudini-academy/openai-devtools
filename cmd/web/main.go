@@ -18,7 +18,7 @@ type application struct {
 	Response     string
 	OpenAIClient *OpenAIClient
 	users        *mysql.UserModel
-	CustomGPT  *mysql.CustomGPTModel
+	CustomGPT    *mysql.CustomGPTModel
 	errorLog     *log.Logger
 	infoLog      *log.Logger
 	session      *sessions.Session
@@ -33,11 +33,13 @@ func main() {
 	flag.Parse()
 
 	infoLog, errorLog := initLogger()
+
 	db, er := openDB(dsn)
 	if er != nil {
 		errorLog.Fatal(er)
 	}
 	defer db.Close()
+
 	session := sessions.New([]byte(*secret))
 	session.Lifetime = 12 * time.Hour
 
@@ -45,13 +47,11 @@ func main() {
 
 	app := &application{
 		users:        &mysql.UserModel{DB: db},
-		CustomGPT:  &mysql.CustomGPTModel{DB: db},
+		CustomGPT:    &mysql.CustomGPTModel{DB: db},
 		errorLog:     errorLog,
 		infoLog:      infoLog,
 		session:      session,
 		OpenAIClient: openAIClient,
-		infoLog:      infoLog,
-		errorLog:     errorLog,
 	}
 
 	srv := &http.Server{
@@ -59,6 +59,7 @@ func main() {
 		Handler:  app.routes(),
 		ErrorLog: errorLog,
 	}
+
 	fmt.Println("starting server on ", *addr)
 	err := srv.ListenAndServe()
 	if err != nil {

@@ -1,9 +1,12 @@
 {{define "header"}}
-    <nav class="flex items-center justify-between lg:px-8" aria-label="Global">
-        <div class="flex lg:flex-1">
+    <nav class="flex items-center justify-between  mx-auto max-w-5xl py-12 h-16" aria-label="Global">
             <a href="/" class="-m-1.5 p-1.5 z-10">
-                 <img class="h-16 w-auto" src="/static/image/gpt-devtools-logo-nbg.png" alt="">
+                 <img class="h-20 w-auto" src="/static/image/gpt-devtools-logo-nbg.png" alt="">
             </a>
-        </div>
+
+            <div class="hidden lg:flex lg:space-x-10 mx-4">
+                <a href="/" title="" class="text-lg font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Home </a>
+                <a href="/logout" title="" class="text-lg font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Logout </a>
+            </div>
     </nav>
 {{end}}

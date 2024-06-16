@@ -5,8 +5,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-
-	"github.com/golangcollege/sessions"
 )
 
 //TODO: Render function
@@ -17,7 +15,6 @@ type TemplateData struct {
 	AllButton      []*models.CustomGPT
 	PromptMessage  string
 	Username       string
-	session        *sessions.Session
 	Flash          string
 	PromptID       int
 	FlashCategory  string

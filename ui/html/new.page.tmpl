@@ -1,23 +1,29 @@
 {{template "base" .}}
 
-{{define "body"}}    
-    <nav class="logout" >
-        <a href='/home'> Home </a>
-       <a href='/user/logout'> Logout </a>
-    </nav>
-{{end}}
+{{define "body"}}   
+     <nav class="flex items-center justify-between mx-auto max-w-5xl py-12 h-16 pt-16" aria-label="Global">
+            <a href="/" class="-m-1.5 p-1.5 z-10">
+                 <img class="h-20 w-auto" src="/static/image/gpt-devtools-logo-nbg.png" alt="">
+            </a>
 
-{{define "button"}}
-<div>
+            <div class="hidden lg:flex lg:space-x-10 mx-4">
+                <a href="/" title="" class="text-lg font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Home </a>
+                <a href="/logout" title="" class="text-lg font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Logout </a>
+            </div>
+    </nav>
+
+    <div class="mx-auto max-w-5xl z-10 relative">
+        <h2 class="text-3xl mb-8">Create a new custom GPT</h2>
         <form method="POST" action="/createcustomgpt">
-                <input type="hidden" value="NewFeature" >
-                <label>Tittle</label>
-                <input type="text" name="FunctionName" placeholder="Tittle"></input>
-                <label>System Message</label>
-                <textarea name="FunctionMessage" placeholder="Message"></textarea>
-                <input type="submit" value="Submit"/>
-            </form>
+            <input type="hidden" value="NewFeature" >
+
+            <label class="block text-gray-700 text-lg font-light mb-2">Title</label>
+            <input type="text" name="FunctionName" placeholder="Title" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"></input>
+            
+            <label class="block text-gray-700 text-lg my-4 font-light mb-2">System Message</label>
+            <textarea class="h-40 block p-2.5 w-full text-base text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" name="FunctionMessage" placeholder="Message"></textarea>
+            
+            <input type="submit" class="mt-4 text-xl bg-fuchsia-600 text-white py-4 px-14 rounded-lg hover:bg-fuchsia-800 transition duration-300" value="Submit"/>
+        </form>
     </div>
-{{end}}
-{{define "response"}}
 {{end}}

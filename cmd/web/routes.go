@@ -20,11 +20,11 @@ func (app *application) routes() http.Handler {
 	mux.Post("/customgpt", http.HandlerFunc(app.customGPTFunction))
 
 	// Login and Sign up
-	mux.Get("/user/login", app.session.Enable(http.HandlerFunc(app.loginForm)))
-	mux.Post("/user/login", app.session.Enable(http.HandlerFunc(app.login)))
-	mux.Get("/user/signup", app.session.Enable(http.HandlerFunc(app.signUpForm)))
-	mux.Post("/user/signup", app.session.Enable(http.HandlerFunc(app.signUp)))
-	mux.Get("/user/logout", app.session.Enable(http.HandlerFunc(app.logoutUser)))
+	mux.Get("/login", app.session.Enable(http.HandlerFunc(app.loginForm)))
+	mux.Post("/login", app.session.Enable(http.HandlerFunc(app.login)))
+	mux.Get("/signup", app.session.Enable(http.HandlerFunc(app.signUpForm)))
+	mux.Post("/signup", app.session.Enable(http.HandlerFunc(app.signUp)))
+	mux.Get("/logout", app.session.Enable(http.HandlerFunc(app.logoutUser)))
 
 	// mux.Get("/handleQuery", http.HandlerFunc(app.handleQuery)
 
