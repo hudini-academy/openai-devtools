@@ -1,16 +1,23 @@
 package mysql
 
 import (
-	"OpenAIDevTools/pkg/models"
 	"database/sql"
+	"errors"
+	"log"
+
+	"golang.org/x/crypto/bcrypt"
+
+	"OpenAIDevTools/pkg/models"
 )
 
+// UserModel represents the model for interacting with the users table in the database.
 type UserModel struct {
 	DB *sql.DB
 }
 
-func (m *UserModel) Insert(name, email, password string) error {
-	stmt := "INSERT INTO users (name, email, password) VALUES (?,?,?)"
+// Insert inserts a new user into the users table.
+func (m *UserModel) Insert(name, email string, password []byte) error {
+	stmt := "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"
 	_, err := m.DB.Exec(stmt, name, email, password)
 	if err != nil {
 		return err
@@ -18,30 +25,47 @@ func (m *UserModel) Insert(name, email, password string) error {
 	return nil
 }
 
-func (m *UserModel) Authenticate(email, password string) (bool, error) {
-	stmt := "SELECT id FROM users WHERE email = ? AND password = ?"
+// Authenticate verifies the user credentials (email and password).
+func (m *UserModel) Authenticate(email, password string) (int, error) {
+	var id int
+	var hashedPassword []byte
 
-	rows,err := m.DB.Query(stmt, email, password)
-	if err != nil {
-		return false, nil
+	row := m.DB.QueryRow("SELECT id, password FROM users WHERE email = ?", email)
+	err := row.Scan(&id, &hashedPassword)
+	if err == sql.ErrNoRows {
+		return 0, models.ErrInvalidCredentials
+	} else if err != nil {
+		return 0, err
 	}
-	defer rows.Close()
-	return rows.Next(), nil
 
-	// var id int
+	err = bcrypt.CompareHashAndPassword(hashedPassword, []byte(password))
+	if err != nil {
+		return 0, models.ErrInvalidCredentials
+	}
 
-	// err := row.Scan(&id)
-	// if err == sql.ErrNoRows {
-	// 	return 0, nil
-	// } else if err != nil {
-	// 	return id, err
-	// }
-
-	// Any other error
-	//return 0, nil
+	return id, nil
 }
 
-func (m *UserModel) Get(id int) (*models.User, error) {
-	return nil, nil
+// GetUsernameByID retrieves the username with a given user ID.
+func (m *UserModel) GetUsernameByID(id int) (string, error) {
+	var username string
+	err := m.DB.QueryRow("SELECT name FROM users WHERE id = ?", id).Scan(&username)
+	if err == sql.ErrNoRows {
+		return "", errors.New("user not found")
+	} else if err != nil {
+		return "", err
+	}
+	return username, nil
 }
 
+// UserExist checks if a user with the given email already exists in the database.
+func (m *UserModel) UserExist(email string) bool {
+    var exists bool
+    query := "SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)"
+    err := m.DB.QueryRow(query, email).Scan(&exists)
+    if err != nil {
+        log.Println("Error checking email existence:", err)
+        return false
+    }
+    return exists
+}

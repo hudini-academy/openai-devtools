@@ -3,17 +3,16 @@
 {{define "body"}}
     
 <nav class="logout" >
-        {{if .Username}}
-        <p>Hey, {{.Username}}!</p>
-        {{end}}
+        
+        <p>Welcome, {{ .Username }}</p>
         <a href='/home'> Home </a>
        <a href='/user/logout'> Logout </a>
+       <a href=''> <i class="glyphicon glyphicon-user"></i>{{ .Username }} </a>
     </nav>
 {{end}}
 
 {{define "button"}}
-<div class='list-controls'>
-       
+<div class='list-controls'>      
         {{range .AllButton}}
          <form method="GET" class="devtools-buttons" action="/customgpt">
          <input type="hidden" name="id" value="{{.ID}}">
