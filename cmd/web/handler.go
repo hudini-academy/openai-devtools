@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"regexp"
 	"strings"
 
 	"net/http"
@@ -19,10 +20,16 @@ var AllCustomGPT []*models.CustomGPT
 
 // Renders homepage
 func (app *application) Base(w http.ResponseWriter, r *http.Request) {
+  // Retrieve user ID from session
+	userID := app.session.GetInt(r, "username")
+	if userID == 0 {
+		app.session.Put(r, "flash", "Unauthorized access")
+		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		return
+	}
 
 	// Check if user id present in session
 	// if not, show landing page
-	app.infoLog.Println("Test")
 	isAuth, ok := app.session.Get(r, "Authenticated").(bool)
 	if !ok {
 		app.errorLog.Println("Error getting session")
@@ -33,6 +40,19 @@ func (app *application) Base(w http.ResponseWriter, r *http.Request) {
 	if !isAuth {
 		app.landingPage(w, r)
 		return
+	}
+  
+  	// Fetch user details from userID
+	userName, err := app.users.GetUsernameByID(userID)
+	if err != nil {
+		app.errorLog.Println("Error fetching user name:", err.Error())
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	// Render home page with user's name
+	data := TemplateData{
+		Username:  userName,
+		AllButton: AllCustomGPT,
 	}
 
 	// if preset, show the dashboard
@@ -47,7 +67,7 @@ func (app *application) Base(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render(w, files, nil)
+	render(w, files, &data)
 }
 
 // isValidPassword checks if the given password meets the required criteria
@@ -112,6 +132,17 @@ func (app *application) createCustomGPT(w http.ResponseWriter, r *http.Request) 
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
+func (app *application) deleteCustomGPT(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	fmt.Println(id)
+	err := app.CustomGPT.DeleteFunction(id)
+	if err != nil {
+		app.errorLog.Println(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+	}
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
+}
+
 // Render the page Prompt page
 func (app *application) customGPTPage(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
@@ -128,6 +159,7 @@ func (app *application) customGPTPage(w http.ResponseWriter, r *http.Request) {
 		Response:  "",
 		AllButton: AllCustomGPT,
 		PageLayoutData: &models.CustomGPT{
+			ID: id,
 			SystemName: custom.SystemName,
 		},
 		PromptMessage: "",
@@ -167,8 +199,6 @@ func (app *application) customGPTFunction(w http.ResponseWriter, r *http.Request
 		Response:      template.HTML(Response),
 		PromptMessage: prompt,
 	})
-
-	// fmt.Println("Response:", Response)
 }
 
 // func (app *application) handleQuery(w http.ResponseWriter, r *http.Request) {
@@ -215,6 +245,16 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
 		return
 	}
+	if app.users.UserExist(userEmail) {
+		app.session.Put(r, "flash", "User already exists")
+		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
+		return
+	}
+	if err := isValidPassword(password); err != nil {
+		app.session.Put(r, "flash", err.Error())
+		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
+		return
+	}
 
 	if len(strings.TrimSpace(userName)) != 0 && len(strings.TrimSpace(userEmail)) != 0 && len(strings.TrimSpace(password)) != 0 {
 		err := app.users.Insert(userName, userEmail, hashedPassword)
@@ -223,7 +263,6 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Internal Server Error", 500)
 			http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
 		}
-
 		app.session.Put(r, "flash", "SignUp Successful")
 		app.session.Put(r, "flashCategory", "success")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
@@ -269,14 +308,16 @@ func (app *application) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if isUser != 0 { // TODO: VISHWA: need to check if this is correct logic
+	if isUser != -1 { // TODO: VISHWA: need to check if this is correct logic
 		app.session.Put(r, "Authenticated", true)
+
 		app.session.Put(r, "username", isUser)
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	} else {
 		app.session.Put(r, "flash", "Login failed")
 		app.session.Put(r, "flashCategory", "failure")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+
 		app.session.Put(r, "Authenticated", false)
 	}
 }

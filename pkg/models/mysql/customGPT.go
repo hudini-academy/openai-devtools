@@ -63,3 +63,12 @@ func (m *CustomGPTModel) GetIndividualFunction(id int) (*models.CustomGPT, error
 	// If no rows were returned, return a nil pointer and a specific error
 	return nil, sql.ErrNoRows
 }
+
+func (m *CustomGPTModel) DeleteFunction(id int) error {
+	stmt:= `DELETE FROM customgpt WHERE id = ?`
+	_, err := m.DB.Exec(stmt, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

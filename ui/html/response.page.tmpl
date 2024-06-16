@@ -7,13 +7,13 @@
     </nav>
 {{end}}
 {{define "button"}}
-<div class='list-controls'>
-       
+<div class='list-controls'>       
         {{range .AllButton}}
          <form method="GET" class="devtools-buttons" action="/customgpt">
          <input type="hidden" name="id" value="{{.ID}}">
             <input type="submit" value="{{.SystemName}}">
         </form>
+     
         {{end}}
         <form method="GET" class="devtools-buttons" action="/rendercustomgpt">
             <input type="submit" value="Custom GPT">
@@ -22,21 +22,24 @@
 {{end}}
 {{define "response"}}
         <h2>{{.PageLayoutData.SystemName}}</h2>
+           <form method="POST" class="devtools-buttons" action="/deletecustomgpt">
+         <input type="hidden" name="id" value="{{.PageLayoutData.ID}}">
+            <input type="submit" value="Delete">
+        </form>
             <form method="POST" class="devtools-buttons" action="">
                 <input type="hidden" value="{{.PageLayoutData.SystemName}}" data-id="{{.PageLayoutData.ID}}"> 
                 <textarea name="Message" placeholder="Code:-"></textarea>
                 <input id="submit-button" type="image" value="Submit" src="/static/image/button.png" />
             </form>    
     <div class="response-section">
-      <h2>Prompt: </h2>
-          {{if ne .PromptMessage ""}}
-        <p>{{.PromptMessage}}</p>
-        {{end}}
+        <h2>Prompt: </h2>
+            {{if ne .PromptMessage ""}}
+                <p>{{.PromptMessage}}</p>
+            {{end}}
 
         <h2>Response: </h2>
-       {{if gt (len .Response) 0}}
-        <div>{{.Response}}</div>
-        {{end}}
-
+            {{if gt (len .Response) 0}}
+                <div>{{.Response}}</div>
+            {{end}}
     </div> 
 {{end}}
