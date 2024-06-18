@@ -1,5 +1,6 @@
 package main
 
+// Import the Required packages
 import (
 	"database/sql"
 	"log"
@@ -17,6 +18,10 @@ import (
 
 var printAst = false
 
+// mdToHTML converts markdown to HTML using github.com/gomarkdown/markdown and github.com/gomarkdown/markdown/html packages,
+// with extensions: parser.CommonExtensions, parser.AutoHeadingIDs, parser.NoEmptyLineBeforeBlock,
+// and flags: html.CommonFlags, html.HrefTargetBlank.
+// Params: input byte slice of markdown content. Returns: byte slice of HTML content.
 func mdToHTML(md []byte) []byte {
 	// create markdown parser with extensions
 	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
@@ -35,28 +40,34 @@ func mdToHTML(md []byte) []byte {
 	renderer := html.NewRenderer(opts)
 
 	return markdown.Render(doc, renderer)
-
 }
+
+// initLogger initializes info and error loggers with file setup and formats;
+// returns info and error loggers.
 func initLogger() (*log.Logger, *log.Logger) {
-	//create variable f for info
+	// Create variable infoFile for info log file
 	infoFile, err := os.OpenFile("./info.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//create variable e for error.log
+	// Create variable errFile for error log file
 	errFile, err := os.OpenFile("./error.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//created logger using log.New() for writing information message
-	//destination,prefix message,flags for additional info(three parameters)
+	// Create info logger with prefix "INFO\t", date, time, and flags
 	infoLog := log.New(infoFile, "INFO\t", log.Ldate|log.Ltime)
+
+	// Create error logger with prefix "ERROR\t", date, time, file name and line number, and flags
 	errorLog := log.New(errFile, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	return infoLog, errorLog
 }
+
+// openDB opens database connection using provided DSN with sql.Open, 
+// pings to verify connection; returns *sql.DB and error.
 func openDB(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
@@ -77,10 +88,8 @@ func isValidEmail(email string) bool {
 	return regex.MatchString(email)
 }
 
-// isValidPassword checks if a password meets the required criteria.
-// The password must contain at least 8 characters, including at least one uppercase letter,
-// one lowercase letter, one digit, and one special character.
-// If the password is valid, it returns nil. Otherwise, it returns an error.
+// isValidPassword checks if password meets criteria: >=8 chars,
+// 1 uppercase, 1 lowercase, 1 digit, 1 special char; returns nil if valid, error otherwise.
 func isValidPassword(password string) error {
 	var hasUpper, hasLower, hasDigit, hasSpecial bool
 	for _, char := range password {

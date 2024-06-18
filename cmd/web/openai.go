@@ -8,18 +8,19 @@ import (
 	"strings"
 )
 
-// OpenAIClient represents the OpenAI API client configuration.
+// `OpenAIClient` struct holds an API key for interacting with the OpenAI API.
 type OpenAIClient struct {
 	APIKey string
 }
 
-// CompletionResponse represents the response structure from OpenAI's completion endpoint.
-
+// `Message` struct represents a JSON-serializable message with fields for role and content.
 type Message struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
 }
 
+// `Choice` struct defines a choice with an index, a message (using `Message` struct), optional log probabilities,
+// and a finish reason, suitable for JSON serialization.
 type Choice struct {
 	Index        int      `json:"index"`
 	Message      Message  `json:"message"`
@@ -27,11 +28,15 @@ type Choice struct {
 	FinishReason string   `json:"finish_reason"`
 }
 
+// `CompletionResponse` struct encapsulates a list of `Choice` structs,
+// intended for JSON serialization as "choices".
 type CompletionResponse struct {
 	Choices []Choice `json:"choices"`
 }
 
 // NewOpenAIClient creates a new instance of the OpenAI client.
+// apiKey: The API key for accessing the OpenAI API.
+// Returns: A pointer to the newly created OpenAIClient instance.
 func NewOpenAIClient(apiKey string) *OpenAIClient {
 	return &OpenAIClient{
 		APIKey: apiKey,
@@ -90,12 +95,19 @@ func (c *OpenAIClient) GetCompletionResponse(promptText string, ChatSystem *Chat
 	return []byte(""), fmt.Errorf("no completion response received")
 }
 
+// genereateCompletionRequest generates a JSON request for the OpenAI completion API.
+// It takes a prompt text and a ChatSystem pointer as parameters.
+// The function constructs a JSON object with the specified model and messages,
+// including the system message and the user's prompt.
+// It returns a byte slice containing the JSON request and an error if any.
 func (c *OpenAIClient) genereateCompletionRequest(promptText string, ChatSystem *ChatSystem) ([]byte, error) {
+	// Define the messages array with the system message and user's prompt
 	messages := []Message{
 		{Role: "system", Content: ChatSystem.SystemMessage},
 		{Role: "user", Content: promptText}, // Use the text variable here
 	}
 
+	// Define the request JSON structure
 	requestJson := struct {
 		Model    string    `json:"model"`
 		Messages []Message `json:"messages"`
@@ -104,12 +116,13 @@ func (c *OpenAIClient) genereateCompletionRequest(promptText string, ChatSystem 
 		Messages: messages,
 	}
 
+	// Marshal the request JSON structure to a byte slice with indentation
 	requestJSONString, err := json.MarshalIndent(requestJson, "", "  ")
 	if err != nil {
 		fmt.Println("Error marshaling JSON:", err)
 		return []byte("Failed to generate the JSON"), nil
 	}
 
+	// Return the byte slice containing the JSON request and nil error
 	return requestJSONString, nil
-
 }
