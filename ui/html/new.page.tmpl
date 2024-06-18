@@ -15,6 +15,8 @@
     <div class="mx-auto max-w-5xl z-10 relative">
         <h2 class="text-3xl mb-8">Create a new custom GPT</h2>
         <form method="POST" action="/createcustomgpt">
+
+            
             <input type="hidden" value="NewFeature" >
 
             <label class="block text-gray-700 text-lg font-light mb-2">Title</label>
@@ -24,6 +26,7 @@
             <textarea class="h-40 block p-2.5 w-full text-base text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" name="FunctionMessage" placeholder="Message"></textarea>
             
             <input type="submit" class="mt-4 text-xl bg-fuchsia-600 text-white py-4 px-14 rounded-lg hover:bg-fuchsia-800 transition duration-300" value="Submit"/>
+             
         </form>
     </div>
 {{end}}
